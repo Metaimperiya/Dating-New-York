@@ -4,15 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <title>DATING NEW YORK | PLAYER SYSTEM</title>
+    <meta name="description" content="Dating New York: Player System. 40 глав о психологии знакомств, онлайн и оффлайн dating, выживании в мегаполисе. Автор: Анатолий Буйкевич.">
+    
+    <meta name="keywords" content="Dating New York, NYC dating, Player System, психология отношений, знакомства в Нью-Йорке, 3DOM 4EVA, киберлогия, online dating NYC, casual dating, LGBT dating, dating после 30, dating после 40, dating после 50, советы по знакомствам, выживание в мегаполисе">
+
+    <meta name="author" content="PLAYER">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dating-new-york.vercel.app/">
+
+    <!-- Open Graph для соцсетей -->
     <meta property="og:title" content="DATING NEW YORK | PLAYER SYSTEM">
-    <meta property="og:description" content="40 глав о выживании и психологии отношений в мегаполисе.">
+    <meta property="og:description" content="40 глав о выживании, психологии отношений и онлайн-знакомствах в мегаполисе. Автор: Анатолий Буйкевич.">
     <meta property="og:image" content="https://dating-new-york.vercel.app/DatingNewYork.JPG">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <title>DATING NEW YORK | PLAYER SYSTEM</title>
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DATING NEW YORK | PLAYER SYSTEM">
+    <meta name="twitter:description" content="40 глав о выживании, психологии отношений и онлайн-знакомствах в мегаполисе.">
+    <meta name="twitter:image" content="https://dating-new-york.vercel.app/DatingNewYork.JPG">
+
+    <!-- Подключение иконок Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --cyan: #00f2ff;
@@ -380,6 +397,15 @@
                 font-size: 0.9rem;
                 letter-spacing: 5px;
             }
+            
+            .intro-box p {
+                font-size: 1rem;
+            }
+            
+            .btn-main {
+                padding: 18px;
+                font-size: 1rem;
+            }
         }
 
         /* Анимация появления */
@@ -630,7 +656,10 @@
         mouseY = e.clientY;
     });
     
-    window.onresize = resize;
+    // Адаптивность при изменении размера окна
+    window.addEventListener('resize', resize);
+    
+    // Инициализация
     resize();
     update();
     
@@ -661,6 +690,16 @@
         const firstCard = document.querySelector('.section-card');
         if (firstCard) firstCard.classList.add('active');
     }, 1000);
+    
+    // Добавляем обработчики для клавиатуры (Tab для навигации)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            // Закрываем все секции при нажатии Escape
+            document.querySelectorAll('.section-card.active').forEach(card => {
+                card.classList.remove('active');
+            });
+        }
+    });
 </script>
 </body>
 </html>
