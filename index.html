@@ -3,11 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta property="og:title" content="DATING NEW YORK | PLAYER SYSTEM">
+    <meta property="og:description" content="40 глав о выживании и психологии отношений в мегаполисе.">
+    <meta property="og:image" content="https://dating-new-york.vercel.app/DatingNewYork.JPG">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+
     <title>DATING NEW YORK | PLAYER SYSTEM</title>
     <style>
         :root {
-            --cyan: #00f2ff;   /* Твой голубой для цифр */
-            --purple: #bf00ff; /* Сиреневый только для акцентов */
+            --cyan: #00f2ff;
+            --purple: #bf00ff;
             --bg: #000000;
         }
 
@@ -15,7 +23,7 @@
         
         body {
             background-color: var(--bg);
-            color: #ffffff; /* Весь текст белый */
+            color: #ffffff;
             font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
             overflow-x: hidden;
             line-height: 1.5;
@@ -47,7 +55,6 @@
             backdrop-filter: blur(5px);
         }
 
-        /* Карточки разделов */
         .section-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(0, 242, 255, 0.2);
@@ -77,25 +84,23 @@
         .section-card.active { border-color: var(--cyan); }
         .section-card.active .section-content { display: block; }
 
-        /* Список глав: Голубые цифры + Белый текст */
         .chapter-link {
             padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             font-size: 1rem;
-            color: #ffffff; /* Текст строго белый */
+            color: #ffffff; 
             display: flex;
             align-items: flex-start;
         }
         
         .chapter-num { 
-            color: var(--cyan); /* Цифры строго голубые */
+            color: var(--cyan); 
             font-family: monospace;
             font-weight: bold;
             margin-right: 15px;
             min-width: 25px;
         }
 
-        /* Бегущие строки */
         .marquee {
             position: fixed; width: 100%; overflow: hidden;
             background: #000; padding: 12px 0; z-index: 100;
@@ -135,78 +140,9 @@
         <div class="section-header">ЧАСТЬ I. СИСТЕМА</div>
         <div class="section-content">
             <div class="chapter-link"><span class="chapter-num">01</span> Dating New York: что такое знакомства</div>
-            <div class="chapter-link"><span class="chapter-num">02</span> NYC dating culture: скорость и одиночество</div>
-            <div class="chapter-link"><span class="chapter-num">03</span> Почему знакомства в городе не работают</div>
-            <div class="chapter-link"><span class="chapter-num">04</span> Психология знакомств: мужчина и женщина</div>
-            <div class="chapter-link"><span class="chapter-num">05</span> Dating NYC как рынок, а не романтика</div>
-            <div class="chapter-link"><span class="chapter-num">06</span> Эмоциональное выгорание</div>
-            <div class="chapter-link"><span class="chapter-num">07</span> Почему сложно строить отношения</div>
-            <div class="chapter-link"><span class="chapter-num">08</span> Страх близости и привязанности</div>
-        </div>
+            </div>
     </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ II. ФОРМАТЫ ЗНАКОМСТВ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">09</span> Знакомства: ожидания и реальность</div>
-            <div class="chapter-link"><span class="chapter-num">10</span> LGBT dating New York: экосистема</div>
-            <div class="chapter-link"><span class="chapter-num">11</span> Знакомства для дружбы vs отношений</div>
-            <div class="chapter-link"><span class="chapter-num">12</span> Casual dating и интим без обязательств</div>
-            <div class="chapter-link"><span class="chapter-num">13</span> Почему люди ищут внимание, а не любовь</div>
-            <div class="chapter-link"><span class="chapter-num">14</span> Dating после 30, 40 и 50 лет</div>
-            <div class="chapter-link"><span class="chapter-num">15</span> Развод и возвращение в среду</div>
-            <div class="chapter-link"><span class="chapter-num">16</span> Психология людей после развода</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ III. ОНЛАЙН И БОТЫ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">17</span> Online dating: как всё устроено</div>
-            <div class="chapter-link"><span class="chapter-num">18</span> Платный dating — почему это развод</div>
-            <div class="chapter-link"><span class="chapter-num">19</span> Боты и фейковые аккаунты</div>
-            <div class="chapter-link"><span class="chapter-num">20</span> Мошенники в знакомствах</div>
-            <div class="chapter-link"><span class="chapter-num">21</span> Catfishing и подмена личности</div>
-            <div class="chapter-link"><span class="chapter-num">22</span> Почему в личку пишут боты</div>
-            <div class="chapter-link"><span class="chapter-num">23</span> Алгоритмы и манипуляция</div>
-            <div class="chapter-link"><span class="chapter-num">24</span> Dating как бизнес корпораций</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ IV. СОЦИАЛЬНЫЕ СЕТИ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">25</span> Почему соцсети работают лучше</div>
-            <div class="chapter-link"><span class="chapter-num">26</span> Instagram, Telegram, Twitter</div>
-            <div class="chapter-link"><span class="chapter-num">27</span> Как искать знакомства в соцсетях</div>
-            <div class="chapter-link"><span class="chapter-num">28</span> Первое сообщение без манипуляций</div>
-            <div class="chapter-link"><span class="chapter-num">29</span> Психология общения в личке</div>
-            <div class="chapter-link"><span class="chapter-num">30</span> Почему бесплатные сайты честнее</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ V. ПСИХОЛОГИЯ ВЫЖИВАНИЯ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">31</span> Психологические травмы и dating</div>
-            <div class="chapter-link"><span class="chapter-num">32</span> Как не потерять себя</div>
-            <div class="chapter-link"><span class="chapter-num">33</span> Границы, манипуляции и контроль</div>
-            <div class="chapter-link"><span class="chapter-num">34</span> Ghosting: почему люди исчезают</div>
-            <div class="chapter-link"><span class="chapter-num">35</span> Химия, дофамин и зависимость</div>
-            <div class="chapter-link"><span class="chapter-num">36</span> Почему совпадение ≠ отношения</div>
-            <div class="chapter-link"><span class="chapter-num">37</span> Одиночество в толпе</div>
-            <div class="chapter-link"><span class="chapter-num">38</span> Как отличить интерес от игры</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ VI. ВЫВОДЫ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">39</span> Можно ли найти любовь в НЙ</div>
-            <div class="chapter-link"><span class="chapter-num">40</span> Честный вывод без иллюзий</div>
-        </div>
-    </div>
-
+    
     <a href="https://www.litres.ru/" class="btn-main">GET FULL ACCESS ON LITRES</a>
 </div>
 
