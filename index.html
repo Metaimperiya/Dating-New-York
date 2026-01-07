@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating New York - PLAYER (Anatoliy Buykevich)</title>
+    <meta name="description" content="Dating New York: A synthetic psychology and survival guide to NYC dating culture by PLAYER. 3DOM 4EVA.">
+    <style>
+        :root {
+            --neon: #ff0055;
+            --blue: #00f2ff;
+            --bg: #050505;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        .ticker-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #111;
+            border-bottom: 1px solid #333;
+            padding: 10px 0;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .ticker-text {
+            white-space: nowrap;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 1.2rem;
+            color: var(--neon);
+            text-transform: uppercase;
+            animation: ticker 20s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .main-stage {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+            width: 90%;
+        }
+
+        .dynamic-text {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            height: 1.2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        .glitch {
+            position: relative;
+            animation: glitch-anim 4s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { text-shadow: 2px 0 var(--blue), -2px 0 var(--neon); }
+            25% { text-shadow: -2px 0 var(--blue), 2px 0 var(--neon); }
+            50% { text-shadow: 2px 0 var(--neon), -2px 0 var(--blue); }
+            75% { text-shadow: -1px 0 var(--blue), 1px 0 var(--neon); }
+            100% { text-shadow: 2px 0 var(--blue), -2px 0 var(--neon); }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: scale(0.95) blur(10px);
+        }
+
+        .subtitle {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .footer-ticker {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #333;
+            padding: 10px 0;
+            background: #000;
+            z-index: 10;
+        }
+
+        .footer-ticker .ticker-text {
+            color: var(--blue);
+            animation-direction: reverse;
+            animation-duration: 15s;
+        }
+
+        .dot {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: blink var(--d) infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="ticker-container">
+        <div class="ticker-text">
+            NEW YORK • NYC • DATING • CONNECTION • LONELINESS • SURVIVAL • PLAYER • 3DOM 4EVA • NEW YORK • NYC • DATING •
+        </div>
+    </div>
+
+    <div class="main-stage">
+        <div id="word-target" class="dynamic-text glitch">DATING</div>
+        <div class="subtitle">A Book Project by PLAYER</div>
+    </div>
+
+    <div class="footer-ticker">
+        <div class="ticker-text">
+            SYNTHETIC PSYCHOLOGY • URBAN JUNGLE • CHEMICAL REACTION • MANHATTAN NIGHTS • NO SLEEP •
+        </div>
+    </div>
+
+    <script>
+        const words = ["Dating", "Connection", "Loneliness", "Chemistry", "NYC"];
+        let currentIndex = 0;
+        const target = document.getElementById('word-target');
+
+        function changeWord() {
+            target.classList.add('fade-out');
+            
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % words.length;
+                target.textContent = words[currentIndex];
+                target.classList.remove('fade-out');
+            }, 500);
+        }
+
+        setInterval(changeWord, 3000);
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2;
+                this.speed = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 50 }, () => new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        for(let i=0; i<30; i++) {
+            let dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.style.left = Math.random() * 100 + 'vw';
+            dot.style.top = Math.random() * 100 + 'vh';
+            dot.style.setProperty('--d', (Math.random() * 3 + 1) + 's');
+            document.body.appendChild(dot);
+        }
+    </script>
+</body>
+</html>
