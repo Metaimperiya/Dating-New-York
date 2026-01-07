@@ -12,232 +12,655 @@
     <meta property="og:type" content="website">
 
     <title>DATING NEW YORK | PLAYER SYSTEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --cyan: #00f2ff;
             --purple: #bf00ff;
+            --dark-purple: #6a00b3;
             --bg: #000000;
+            --card-bg: rgba(10, 10, 20, 0.85);
+            --glow: 0 0 20px rgba(0, 242, 255, 0.4);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
         
         body {
             background-color: var(--bg);
             color: #ffffff;
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             overflow-x: hidden;
-            line-height: 1.5;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
         }
 
         #starfield {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
             z-index: -1;
         }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 70px 15px 100px; }
-
-        header { text-align: center; margin-bottom: 40px; }
-        h1 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            font-weight: 900;
-            color: var(--cyan);
-            text-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
-            letter-spacing: 2px;
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 90px 20px 120px; 
+            position: relative;
+            z-index: 2;
         }
 
-        .intro-box {
-            border: 1px solid var(--cyan);
-            padding: 20px;
+        header { 
+            text-align: center; 
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .title-wrapper {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, var(--cyan) 0%, var(--purple) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: 3px;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(191, 0, 255, 0.3);
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 1.1rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
             margin-bottom: 30px;
-            background: rgba(0,0,0,0.8);
+            font-weight: 300;
+        }
+
+        .chapter-count {
+            display: inline-block;
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
             backdrop-filter: blur(5px);
         }
 
+        .intro-box {
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 25px;
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            box-shadow: var(--glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.05), transparent);
+            transition: left 0.7s;
+        }
+
+        .intro-box:hover::before {
+            left: 100%;
+        }
+
+        .intro-box p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            text-align: center;
+        }
+
+        .section-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
         .section-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            margin-bottom: 12px;
-            border-radius: 2px;
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 242, 255, 0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-card:hover {
+            border-color: rgba(0, 242, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
         }
         
+        .section-card.active {
+            border-color: var(--cyan);
+            box-shadow: var(--glow);
+        }
+
         .section-header {
-            padding: 18px;
+            padding: 22px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
             color: var(--cyan);
-            font-weight: bold;
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .section-header:hover {
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .section-indicator {
+            color: var(--cyan);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .section-card.active .section-indicator {
+            transform: rotate(45deg);
         }
 
         .section-content {
-            display: none;
-            padding: 0 18px 18px;
-            background: rgba(0, 0, 0, 0.4);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s;
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        .section-card.active { border-color: var(--cyan); }
-        .section-card.active .section-content { display: block; }
+        .section-card.active .section-content {
+            max-height: 1000px;
+            padding: 0 25px 25px;
+        }
+
+        .chapter-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
 
         .chapter-link {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 1rem;
-            color: #ffffff; 
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
             display: flex;
             align-items: flex-start;
+            cursor: pointer;
         }
-        
+
+        .chapter-link:hover {
+            background: rgba(0, 242, 255, 0.05);
+            border-left-color: var(--cyan);
+            transform: translateX(5px);
+        }
+
         .chapter-num { 
             color: var(--cyan); 
-            font-family: monospace;
-            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
             margin-right: 15px;
-            min-width: 25px;
+            min-width: 30px;
+            font-size: 1.1rem;
+        }
+
+        .chapter-title {
+            color: #f0f0f0;
+            font-size: 1rem;
+            line-height: 1.4;
         }
 
         .marquee {
-            position: fixed; width: 100%; overflow: hidden;
-            background: #000; padding: 12px 0; z-index: 100;
-            border-top: 1px solid var(--cyan);
+            position: fixed; 
+            width: 100%; 
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.9); 
+            padding: 15px 0; 
+            z-index: 100;
+            border-top: 1px solid rgba(0, 242, 255, 0.3);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.3);
+            backdrop-filter: blur(10px);
         }
-        .top { top: 0; }
-        .bottom { bottom: 0; border-top: 1px solid var(--cyan); }
+        
+        .top { 
+            top: 0; 
+            border-bottom: 1px solid rgba(0, 242, 255, 0.3);
+        }
+        
+        .bottom { 
+            bottom: 0; 
+            border-top: 1px solid rgba(0, 242, 255, 0.3);
+        }
+        
         .m-text {
-            display: inline-block; animation: scroll 30s linear infinite;
-            color: var(--cyan); font-weight: bold; text-transform: uppercase; font-family: monospace;
+            display: inline-block; 
+            white-space: nowrap;
+            animation: scroll 25s linear infinite;
+            color: var(--cyan); 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            padding-right: 50px;
         }
-        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        
+        @keyframes scroll { 
+            0% { transform: translateX(100%); } 
+            100% { transform: translateX(-100%); } 
+        }
 
         .btn-main {
-            display: block; text-align: center; background: transparent;
-            color: var(--cyan); padding: 20px; text-decoration: none;
-            font-weight: 900; text-transform: uppercase; border: 2px solid var(--cyan);
-            margin-top: 40px; transition: 0.3s;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-align: center; 
+            background: transparent;
+            color: var(--cyan); 
+            padding: 22px; 
+            text-decoration: none;
+            font-weight: 700; 
+            text-transform: uppercase; 
+            border: 2px solid var(--cyan);
+            border-radius: 8px;
+            margin-top: 50px; 
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1.5px;
+            font-size: 1.1rem;
         }
-        .btn-main:hover { background: var(--cyan); color: #000; }
+        
+        .btn-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn-main:hover {
+            background: var(--cyan); 
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
+        }
+        
+        .btn-main:hover::before {
+            left: 100%;
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+
+        .footer-info {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 80px 15px 100px;
+            }
+            
+            .chapter-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                padding: 18px 20px;
+            }
+            
+            .m-text {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 2px;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 5px;
+            }
+        }
+
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .delay-4 { animation-delay: 0.4s; opacity: 0; }
+        .delay-5 { animation-delay: 0.5s; opacity: 0; }
+        .delay-6 { animation-delay: 0.6s; opacity: 0; }
+        .delay-7 { animation-delay: 0.7s; opacity: 0; }
     </style>
 </head>
 <body>
 
 <canvas id="starfield"></canvas>
+<div class="noise-overlay"></div>
 
-<div class="marquee top"><div class="m-text">SYSTEM STATUS: AUTHORIZED • PLAYER • DATING NEW YORK • 3DOM 4EVA •</div></div>
+<div class="marquee top">
+    <div class="m-text">• SYSTEM STATUS: ACTIVE • PLAYER MODE ENGAGED • DATING NEW YORK • 3DOM 4EVA • NYC RELATIONSHIPS ANALYSIS •</div>
+</div>
 
 <div class="container">
-    <header><h1>DATING<br>NEW YORK</h1></header>
+    <header class="fade-in">
+        <div class="title-wrapper">
+            <h1>DATING<br>NEW YORK</h1>
+        </div>
+        <div class="subtitle">PLAYER SYSTEM</div>
+        <div class="chapter-count">40 ГЛАВ</div>
+    </header>
 
-    <div class="intro-box">
+    <div class="intro-box fade-in delay-1">
         <p>Полная структура книги: 40 глав о выживании и психологии отношений в мегаполисе. Система PLAYER.</p>
     </div>
 
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ I. СИСТЕМА</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">01</span> Dating New York: что такое знакомства</div>
-            <div class="chapter-link"><span class="chapter-num">02</span> NYC dating culture: скорость и одиночество</div>
-            <div class="chapter-link"><span class="chapter-num">03</span> Почему знакомства в городе не работают</div>
-            <div class="chapter-link"><span class="chapter-num">04</span> Психология знакомств: мужчина и женщина</div>
-            <div class="chapter-link"><span class="chapter-num">05</span> Dating NYC как рынок, а не романтика</div>
-            <div class="chapter-link"><span class="chapter-num">06</span> Эмоциональное выгорание</div>
-            <div class="chapter-link"><span class="chapter-num">07</span> Почему сложно строить отношения</div>
-            <div class="chapter-link"><span class="chapter-num">08</span> Страх близости и привязанности</div>
+    <div class="section-container">
+        <div class="section-card fade-in delay-2" onclick="toggleSection(this)">
+            <div class="section-header">
+                <span>ЧАСТЬ I. СИСТЕМА</span>
+                <span class="section-indicator">+</span>
+            </div>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-link"><span class="chapter-num">01</span><span class="chapter-title">Dating New York: что такое знакомства</span></div>
+                    <div class="chapter-link"><span class="chapter-num">02</span><span class="chapter-title">NYC dating culture: скорость и одиночество</span></div>
+                    <div class="chapter-link"><span class="chapter-num">03</span><span class="chapter-title">Почему знакомства в городе не работают</span></div>
+                    <div class="chapter-link"><span class="chapter-num">04</span><span class="chapter-title">Психология знакомств: мужчина и женщина</span></div>
+                    <div class="chapter-link"><span class="chapter-num">05</span><span class="chapter-title">Dating NYC как рынок, а не романтика</span></div>
+                    <div class="chapter-link"><span class="chapter-num">06</span><span class="chapter-title">Эмоциональное выгорание</span></div>
+                    <div class="chapter-link"><span class="chapter-num">07</span><span class="chapter-title">Почему сложно строить отношения</span></div>
+                    <div class="chapter-link"><span class="chapter-num">08</span><span class="chapter-title">Страх близости и привязанности</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card fade-in delay-3" onclick="toggleSection(this)">
+            <div class="section-header">
+                <span>ЧАСТЬ II. ФОРМАТЫ ЗНАКОМСТВ</span>
+                <span class="section-indicator">+</span>
+            </div>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-link"><span class="chapter-num">09</span><span class="chapter-title">Знакомства: ожидания и реальность</span></div>
+                    <div class="chapter-link"><span class="chapter-num">10</span><span class="chapter-title">LGBT dating New York: экосистема</span></div>
+                    <div class="chapter-link"><span class="chapter-num">11</span><span class="chapter-title">Знакомства для дружбы vs отношений</span></div>
+                    <div class="chapter-link"><span class="chapter-num">12</span><span class="chapter-title">Casual dating и интим без обязательств</span></div>
+                    <div class="chapter-link"><span class="chapter-num">13</span><span class="chapter-title">Почему люди ищут внимание, а не любовь</span></div>
+                    <div class="chapter-link"><span class="chapter-num">14</span><span class="chapter-title">Dating после 30, 40 и 50 лет</span></div>
+                    <div class="chapter-link"><span class="chapter-num">15</span><span class="chapter-title">Развод и возвращение в среду</span></div>
+                    <div class="chapter-link"><span class="chapter-num">16</span><span class="chapter-title">Психология людей после развода</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card fade-in delay-4" onclick="toggleSection(this)">
+            <div class="section-header">
+                <span>ЧАСТЬ III. ОНЛАЙН И БОТЫ</span>
+                <span class="section-indicator">+</span>
+            </div>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-link"><span class="chapter-num">17</span><span class="chapter-title">Online dating: как всё устроено</span></div>
+                    <div class="chapter-link"><span class="chapter-num">18</span><span class="chapter-title">Платный dating — почему это развод</span></div>
+                    <div class="chapter-link"><span class="chapter-num">19</span><span class="chapter-title">Боты и фейковые аккаунты</span></div>
+                    <div class="chapter-link"><span class="chapter-num">20</span><span class="chapter-title">Мошенники в знакомствах</span></div>
+                    <div class="chapter-link"><span class="chapter-num">21</span><span class="chapter-title">Catfishing и подмена личности</span></div>
+                    <div class="chapter-link"><span class="chapter-num">22</span><span class="chapter-title">Почему в личку пишут боты</span></div>
+                    <div class="chapter-link"><span class="chapter-num">23</span><span class="chapter-title">Алгоритмы и манипуляция</span></div>
+                    <div class="chapter-link"><span class="chapter-num">24</span><span class="chapter-title">Dating как бизнес корпораций</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card fade-in delay-5" onclick="toggleSection(this)">
+            <div class="section-header">
+                <span>ЧАСТЬ IV. СОЦИАЛЬНЫЕ СЕТИ</span>
+                <span class="section-indicator">+</span>
+            </div>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-link"><span class="chapter-num">25</span><span class="chapter-title">Почему соцсети работают лучше</span></div>
+                    <div class="chapter-link"><span class="chapter-num">26</span><span class="chapter-title">Instagram, Telegram, Twitter</span></div>
+                    <div class="chapter-link"><span class="chapter-num">27</span><span class="chapter-title">Как искать знакомства в соцсетях</span></div>
+                    <div class="chapter-link"><span class="chapter-num">28</span><span class="chapter-title">Первое сообщение без манипуляций</span></div>
+                    <div class="chapter-link"><span class="chapter-num">29</span><span class="chapter-title">Психология общения в личке</span></div>
+                    <div class="chapter-link"><span class="chapter-num">30</span><span class="chapter-title">Почему бесплатные сайты честнее</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card fade-in delay-6" onclick="toggleSection(this)">
+            <div class="section-header">
+                <span>ЧАСТЬ V. ПСИХОЛОГИЯ ВЫЖИВАНИЯ</span>
+                <span class="section-indicator">+</span>
+            </div>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-link"><span class="chapter-num">31</span><span class="chapter-title">Психологические травмы и dating</span></div>
+                    <div class="chapter-link"><span class="chapter-num">32</span><span class="chapter-title">Как не потерять себя</span></div>
+                    <div class="chapter-link"><span class="chapter-num">33</span><span class="chapter-title">Границы, манипуляции и контроль</span></div>
+                    <div class="chapter-link"><span class="chapter-num">34</span><span class="chapter-title">Ghosting: почему люди исчезают</span></div>
+                    <div class="chapter-link"><span class="chapter-num">35</span><span class="chapter-title">Химия, дофамин и зависимость</span></div>
+                    <div class="chapter-link"><span class="chapter-num">36</span><span class="chapter-title">Почему совпадение ≠ отношения</span></div>
+                    <div class="chapter-link"><span class="chapter-num">37</span><span class="chapter-title">Одиночество в толпе</span></div>
+                    <div class="chapter-link"><span class="chapter-num">38</span><span class="chapter-title">Как отличить интерес от игры</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card fade-in delay-7" onclick="toggleSection(this)">
+            <div class="section-header">
+                <span>ЧАСТЬ VI. ВЫВОДЫ</span>
+                <span class="section-indicator">+</span>
+            </div>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-link"><span class="chapter-num">39</span><span class="chapter-title">Можно ли найти любовь в НЙ</span></div>
+                    <div class="chapter-link"><span class="chapter-num">40</span><span class="chapter-title">Честный вывод без иллюзий</span></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ II. ФОРМАТЫ ЗНАКОМСТВ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">09</span> Знакомства: ожидания и реальность</div>
-            <div class="chapter-link"><span class="chapter-num">10</span> LGBT dating New York: экосистема</div>
-            <div class="chapter-link"><span class="chapter-num">11</span> Знакомства для дружбы vs отношений</div>
-            <div class="chapter-link"><span class="chapter-num">12</span> Casual dating и интим без обязательств</div>
-            <div class="chapter-link"><span class="chapter-num">13</span> Почему люди ищут внимание, а не любовь</div>
-            <div class="chapter-link"><span class="chapter-num">14</span> Dating после 30, 40 и 50 лет</div>
-            <div class="chapter-link"><span class="chapter-num">15</span> Развод и возвращение в среду</div>
-            <div class="chapter-link"><span class="chapter-num">16</span> Психология людей после развода</div>
-        </div>
+    <a href="https://www.litres.ru/" class="btn-main">
+        <i class="fas fa-lock-open btn-icon"></i>
+        GET FULL ACCESS ON LITRES
+    </a>
+    
+    <div class="footer-info">
+        PLAYER SYSTEM v2.0 • DATING NEW YORK ANALYSIS • 2024
     </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ III. ОНЛАЙН И БОТЫ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">17</span> Online dating: как всё устроено</div>
-            <div class="chapter-link"><span class="chapter-num">18</span> Платный dating — почему это развод</div>
-            <div class="chapter-link"><span class="chapter-num">19</span> Боты и фейковые аккаунты</div>
-            <div class="chapter-link"><span class="chapter-num">20</span> Мошенники в знакомствах</div>
-            <div class="chapter-link"><span class="chapter-num">21</span> Catfishing и подмена личности</div>
-            <div class="chapter-link"><span class="chapter-num">22</span> Почему в личку пишут боты</div>
-            <div class="chapter-link"><span class="chapter-num">23</span> Алгоритмы и манипуляция</div>
-            <div class="chapter-link"><span class="chapter-num">24</span> Dating как бизнес корпораций</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ IV. СОЦИАЛЬНЫЕ СЕТИ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">25</span> Почему соцсети работают лучше</div>
-            <div class="chapter-link"><span class="chapter-num">26</span> Instagram, Telegram, Twitter</div>
-            <div class="chapter-link"><span class="chapter-num">27</span> Как искать знакомства в соцсетях</div>
-            <div class="chapter-link"><span class="chapter-num">28</span> Первое сообщение без манипуляций</div>
-            <div class="chapter-link"><span class="chapter-num">29</span> Психология общения в личке</div>
-            <div class="chapter-link"><span class="chapter-num">30</span> Почему бесплатные сайты честнее</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ V. ПСИХОЛОГИЯ ВЫЖИВАНИЯ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">31</span> Психологические травмы и dating</div>
-            <div class="chapter-link"><span class="chapter-num">32</span> Как не потерять себя</div>
-            <div class="chapter-link"><span class="chapter-num">33</span> Границы, манипуляции и контроль</div>
-            <div class="chapter-link"><span class="chapter-num">34</span> Ghosting: почему люди исчезают</div>
-            <div class="chapter-link"><span class="chapter-num">35</span> Химия, дофамин и зависимость</div>
-            <div class="chapter-link"><span class="chapter-num">36</span> Почему совпадение ≠ отношения</div>
-            <div class="chapter-link"><span class="chapter-num">37</span> Одиночество в толпе</div>
-            <div class="chapter-link"><span class="chapter-num">38</span> Как отличить интерес от игры</div>
-        </div>
-    </div>
-
-    <div class="section-card" onclick="this.classList.toggle('active')">
-        <div class="section-header">ЧАСТЬ VI. ВЫВОДЫ</div>
-        <div class="section-content">
-            <div class="chapter-link"><span class="chapter-num">39</span> Можно ли найти любовь в НЙ</div>
-            <div class="chapter-link"><span class="chapter-num">40</span> Честный вывод без иллюзий</div>
-        </div>
-    </div>
-
-    <a href="https://www.litres.ru/" class="btn-main">GET FULL ACCESS ON LITRES</a>
 </div>
 
-<div class="marquee bottom"><div class="m-text">DATING NEW YORK • CONTROL • LOGIC • RESULTS • NYC • DATING NEW YORK •</div></div>
+<div class="marquee bottom">
+    <div class="m-text">• DATING NEW YORK • CONTROL • LOGIC • RESULTS • PLAYER MINDSET • SYSTEM OVERVIEW •</div>
+</div>
 
 <script>
+    // Улучшенный звездный фон с эффектом параллакса
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let stars = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    let mouseX = 0, mouseY = 0;
+    
+    function resize() { 
+        canvas.width = window.innerWidth; 
+        canvas.height = window.innerHeight; 
+        createStars();
+    }
+    
     function createStars() {
         stars = [];
-        for(let i=0; i<120; i++) stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width });
+        const starCount = Math.min(200, (canvas.width * canvas.height) / 2000);
+        for(let i = 0; i < starCount; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                z: Math.random() * canvas.width,
+                speed: 0.5 + Math.random() * 1.5,
+                size: 0.5 + Math.random() * 1.5
+            });
+        }
     }
+    
     function update() {
-        ctx.fillStyle = "black"; ctx.fillRect(0,0,canvas.width, canvas.height);
-        stars.forEach(s => {
-            s.z -= 1.5; if (s.z <= 0) s.z = canvas.width;
-            let x = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
-            let y = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
-            let size = (1 - s.z/canvas.width) * 1.5;
-            ctx.fillStyle = "white"; ctx.beginPath(); ctx.arc(x, y, size, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const mouseFactor = 0.2;
+        
+        stars.forEach(star => {
+            star.z -= star.speed;
+            
+            if (star.z <= 0) {
+                star.x = Math.random() * canvas.width;
+                star.y = Math.random() * canvas.height;
+                star.z = canvas.width;
+            }
+            
+            // Эффект параллакса от мыши
+            const parallaxX = (mouseX - centerX) * mouseFactor * (star.z / canvas.width);
+            const parallaxY = (mouseY - centerY) * mouseFactor * (star.z / canvas.width);
+            
+            const x = (star.x - centerX + parallaxX) * (canvas.width / star.z) + centerX;
+            const y = (star.y - centerY + parallaxY) * (canvas.width / star.z) + centerY;
+            
+            const size = (1 - star.z / canvas.width) * star.size;
+            const opacity = 1 - star.z / canvas.width;
+            
+            ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Эффект луча для некоторых звезд
+            if (Math.random() > 0.7 && opacity > 0.5) {
+                ctx.strokeStyle = `rgba(0, 242, 255, ${opacity * 0.3})`;
+                ctx.lineWidth = size * 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + (Math.random() - 0.5) * 20, y + (Math.random() - 0.5) * 20);
+                ctx.stroke();
+            }
         });
+        
         requestAnimationFrame(update);
     }
-    window.onresize = resize; resize(); createStars(); update();
+    
+    // Отслеживание мыши для эффекта параллакса
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    window.onresize = resize;
+    resize();
+    update();
+    
+    // Функция для переключения секций
+    function toggleSection(card) {
+        const isActive = card.classList.contains('active');
+        
+        // Закрываем все другие секции
+        document.querySelectorAll('.section-card.active').forEach(activeCard => {
+            if (activeCard !== card) {
+                activeCard.classList.remove('active');
+            }
+        });
+        
+        // Переключаем текущую секцию
+        card.classList.toggle('active');
+        
+        // Плавная прокрутка к открытой секции (только если открываем, а не закрываем)
+        if (!isActive) {
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }
+    
+    // Автоматическое открытие первой секции через 1 секунду
+    setTimeout(() => {
+        const firstCard = document.querySelector('.section-card');
+        if (firstCard) firstCard.classList.add('active');
+    }, 1000);
 </script>
 </body>
 </html>
