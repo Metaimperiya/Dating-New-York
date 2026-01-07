@@ -2,181 +2,274 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DATING NEW YORK | The System by PLAYER</title>
-    <meta name="description" content="Dating New York by PLAYER. Neuropsychology and survival in the NYC dating culture.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DATING NEW YORK | PLAYER SYSTEM</title>
     <style>
-        :root { 
-            --neon: #32ff7e; /* Салатовый неон */
-            --blue: #00f2ff; 
-            --bg: #050505; 
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            background-color: var(--bg);
-            color: #ffffff; /* Чисто белый текст */
-            font-family: 'Courier New', monospace; 
-            line-height: 1.6;
-            overflow-x: hidden;
+        :root {
+            --pink: #ff00ff;
+            --cyan: #00f2ff;
+            --lime: #32ff7e;
+            --bg: #050505;
         }
 
-        /* Анимированный фон со звездами */
-        #canvas {
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.4;
+        }
+
+        /* Анимированный фон: Космос/Звезды */
+        #starfield {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
         }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 100px 20px; position: relative; z-index: 5; }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 15px 100px;
+        }
+
+        /* Заголовок с градиентом и неоном */
+        header { text-align: center; margin-bottom: 40px; }
+        h1 {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--pink), var(--cyan), var(--lime));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.5));
+            letter-spacing: -1px;
+        }
+
+        .player-tag {
+            display: inline-block;
+            color: var(--lime);
+            border: 1px solid var(--lime);
+            padding: 2px 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-top: 10px;
+            box-shadow: 0 0 10px var(--lime);
+        }
+
+        /* Вступление */
+        .intro-box {
+            background: rgba(20, 20, 20, 0.8);
+            border-left: 4px solid var(--pink);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+        }
+        .intro-box p { color: #fff; font-size: 1.1rem; font-weight: 500; }
+
+        /* Секции (Аккордеон) */
+        .section-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .section-card:active { transform: scale(0.98); }
         
-        header { text-align: center; margin-bottom: 60px; }
-        h1 { 
-            font-size: clamp(2rem, 8vw, 4rem); 
-            text-transform: uppercase; 
-            color: var(--neon); 
-            text-shadow: 0 0 15px var(--neon), 0 0 30px var(--neon); 
-            letter-spacing: 5px; 
-            margin-bottom: 10px;
+        .section-header {
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: var(--cyan);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 1rem;
         }
-        .author { color: #fff; letter-spacing: 3px; font-weight: bold; background: rgba(50, 255, 126, 0.2); display: inline-block; padding: 5px 15px; }
 
-        .intro { 
-            background: rgba(0, 0, 0, 0.7); 
-            padding: 30px; 
-            border: 1px solid var(--neon); 
-            margin-bottom: 40px; 
-            backdrop-filter: blur(10px);
-            box-shadow: inset 0 0 15px rgba(50, 255, 126, 0.2);
-        }
-        .intro p { font-size: 1.1rem; color: #fff; }
+        .section-header::after { content: '+'; color: var(--lime); font-size: 1.5rem; }
 
-        .system-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 40px; }
-        .part-card { 
-            background: rgba(0,0,0,0.8); 
-            border: 1px solid #444; 
-            padding: 20px; 
-            transition: 0.3s; 
-            cursor: pointer; 
+        .section-content {
+            display: none;
+            padding: 0 18px 18px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.4);
         }
-        .part-card:hover { border-color: var(--neon); box-shadow: 0 0 20px rgba(50, 255, 126, 0.3); }
-        .part-title { color: var(--neon); font-weight: bold; font-size: 1.3rem; text-transform: uppercase; }
+
+        .section-card.active { border-color: var(--lime); box-shadow: 0 0 15px rgba(50, 255, 126, 0.2); }
+        .section-card.active .section-content { display: block; }
+        .section-card.active .section-header::after { content: '−'; }
+
+        .chapter-link {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem;
+            color: #eee;
+        }
+        .chapter-link span { color: var(--pink); margin-right: 8px; }
+
+        /* Бегущие строки */
+        .marquee {
+            position: fixed;
+            width: 100%;
+            overflow: hidden;
+            background: rgba(0,0,0,0.9);
+            white-space: nowrap;
+            padding: 10px 0;
+            z-index: 100;
+            border-top: 1px solid var(--pink);
+            border-bottom: 1px solid var(--cyan);
+        }
+        .top { top: 0; }
+        .bottom { bottom: 0; border-bottom: none; border-top: 1px solid var(--lime); }
         
-        .chapters { display: none; margin-top: 15px; color: #fff; border-top: 1px solid var(--neon); padding-top: 10px; }
-        .part-card.active .chapters { display: block; }
-        .chapter-item { margin-bottom: 8px; font-size: 0.95rem; }
-        .chapter-item::before { content: "⚡ "; color: var(--neon); }
-
-        .ticker { position: fixed; width: 100%; background: #000; color: var(--neon); padding: 8px 0; font-size: 0.9rem; z-index: 100; overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--neon); }
-        .top-t { top: 0; }
-        .bot-t { bottom: 0; border-top: 1px solid var(--neon); border-bottom: none; }
-        .t-move { display: inline-block; animation: t-move 25s linear infinite; }
-        @keyframes t-move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        .btn-buy { 
-            display: inline-block; margin-top: 40px; padding: 15px 40px; 
-            border: 2px solid var(--neon); color: var(--neon); 
-            text-decoration: none; text-transform: uppercase; font-weight: bold; 
-            background: rgba(0,0,0,0.5); transition: 0.3s; 
+        .m-text {
+            display: inline-block;
+            animation: scroll 20s linear infinite;
+            color: var(--cyan);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-family: monospace;
         }
-        .btn-buy:hover { background: var(--neon); color: #000; box-shadow: 0 0 30px var(--neon); }
+        @keyframes scroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Кнопка */
+        .btn-main {
+            display: block;
+            text-align: center;
+            background: var(--pink);
+            color: white;
+            padding: 20px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 50px;
+            margin-top: 30px;
+            box-shadow: 0 0 20px var(--pink);
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
+<canvas id="starfield"></canvas>
 
-<div class="ticker top-t"><div class="t-move">DATING NEW YORK • SYSTEM • NEUROPSYCHOLOGY • 3DOM 4EVA • PLAYER • SURVIVAL • NYC •</div></div>
+<div class="marquee top">
+    <div class="m-text">Dating New York • PLAYER System • Neuropsychology • Cyberlogy • 3DOM 4EVA • No Limits •</div>
+</div>
 
 <div class="container">
     <header>
-        <h1>Dating New York</h1>
-        <div class="author">BY PLAYER (ANATOLIY BUYKEVICH)</div>
+        <h1>Dating<br>New York</h1>
+        <div class="player-tag">Authorization: PLAYER</div>
     </header>
 
-    <section class="intro">
-        <p>Это не роман. Это система выживания в мегаполисе. Здесь знакомства — это рынок, алгоритмы и психология управления. Узнай правду о Dating New York.</p>
-    </section>
+    <div class="intro-box">
+        <p>Это система выживания в мегаполисе. Знакомства — это рынок, алгоритмы и психология управления. Узнай правду без иллюзий.</p>
+    </div>
 
-    <div class="system-grid">
-        <div class="part-card" onclick="this.classList.toggle('active')">
-            <div class="part-title">Часть I. Система</div>
-            <div class="chapters">
-                <div class="chapter-item">Dating New York: что такое знакомства</div>
-                <div class="chapter-item">NYC dating culture: скорость и одиночество</div>
-                <div class="chapter-item">Эмоциональное выгорание</div>
-            </div>
-        </div>
-        <div class="part-card" onclick="this.classList.toggle('active')">
-            <div class="part-title">Часть II. Форматы</div>
-            <div class="chapters">
-                <div class="chapter-item">Знакомства мужчина женщина</div>
-                <div class="chapter-item">Dating после 30, 40, 50 лет</div>
-            </div>
-        </div>
-        <div class="part-card" onclick="this.classList.toggle('active')">
-            <div class="part-title">Часть III. Онлайн и Боты</div>
-            <div class="chapters">
-                <div class="chapter-item">Online dating: как всё устроено</div>
-                <div class="chapter-item">Платный dating — почему это развод</div>
-                <div class="chapter-item">Боты и фейки</div>
-            </div>
-        </div>
-        <div class="part-card" onclick="this.classList.toggle('active')">
-            <div class="part-title">Часть IV-VI. Психология и Выводы</div>
-            <div class="chapters">
-                <div class="chapter-item">Социальные сети vs Dating платформы</div>
-                <div class="chapter-item">Ghosting: почему люди исчезают</div>
-                <div class="chapter-item">Честный вывод без иллюзий</div>
-            </div>
+    <div class="section-card" onclick="this.classList.toggle('active')">
+        <div class="section-header">Часть I. Система</div>
+        <div class="section-content">
+            <div class="chapter-link"><span>01</span> Dating New York: Что это?</div>
+            <div class="chapter-link"><span>02</span> Культура скорости и одиночества</div>
+            <div class="chapter-link"><span>03</span> Эмоциональное выгорание</div>
         </div>
     </div>
 
-    <div style="text-align: center;">
-        <a href="https://www.litres.ru/" class="btn-buy">Read Full Book on LitRes</a>
+    <div class="section-card" onclick="this.classList.toggle('active')">
+        <div class="section-header">Часть II. Форматы</div>
+        <div class="section-content">
+            <div class="chapter-link"><span>04</span> Ожидания и Реальность</div>
+            <div class="chapter-item"><span>05</span> LGBT Ecosystem NY</div>
+            <div class="chapter-link"><span>06</span> Dating после 30/40/50</div>
+        </div>
     </div>
+
+    <div class="section-card" onclick="this.classList.toggle('active')">
+        <div class="section-header">Часть III. Технологии</div>
+        <div class="section-content">
+            <div class="chapter-link"><span>07</span> Online Dating: Как всё устроено</div>
+            <div class="chapter-link"><span>08</span> Платный дейтинг — это развод</div>
+            <div class="chapter-link"><span>09</span> Боты и Мошенники</div>
+        </div>
+    </div>
+
+    <div class="section-card" onclick="this.classList.toggle('active')">
+        <div class="section-header">Часть IV-VI. Психология</div>
+        <div class="section-content">
+            <div class="chapter-link"><span>10</span> Соцсети vs Традиции</div>
+            <div class="chapter-link"><span>11</span> Психологические травмы</div>
+            <div class="chapter-link"><span>12</span> Выводы без цензуры</div>
+        </div>
+    </div>
+
+    <a href="https://www.litres.ru/" class="btn-main">GET FULL ACCESS</a>
 </div>
 
-<div class="ticker bot-t"><div class="t-move">NEUROPSYCHOLOGY • CONTROL • SURVIVAL • NYC • DATING NEW YORK • 3DOM 4EVA •</div></div>
+<div class="marquee bottom">
+    <div class="m-text" style="color: var(--lime); animation-duration: 15s;">Survival • Control • Chemistry • Manhattan • Logic • Results • 3DOM 4EVA •</div>
+</div>
 
 <script>
-    const canvas = document.getElementById('canvas');
+    const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
-    let width, height, particles;
+    let stars = [];
 
-    function init() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        particles = [];
-        for (let i = 0; i < 100; i++) {
-            particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                size: Math.random() * 2,
-                speed: Math.random() * 0.5 + 0.1
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    function createStars() {
+        stars = [];
+        for(let i=0; i<150; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                z: Math.random() * canvas.width,
+                o: Math.random()
             });
         }
     }
 
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "white";
-        particles.forEach(p => {
-            p.y -= p.speed;
-            if (p.y < 0) p.y = height;
+    function update() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+        
+        stars.forEach(s => {
+            s.z -= 2;
+            if (s.z <= 0) s.z = canvas.width;
+            
+            let x = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+            let y = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+            let size = (1 - s.z/canvas.width) * 3;
+            
+            ctx.fillStyle = `rgba(255, 255, 255, ${1 - s.z/canvas.width})`;
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.arc(x, y, size, 0, Math.PI*2);
             ctx.fill();
         });
-        requestAnimationFrame(animate);
+        requestAnimationFrame(update);
     }
 
-    window.addEventListener('resize', init);
-    init();
-    animate();
+    window.onresize = resize;
+    resize();
+    createStars();
+    update();
 </script>
 
 </body>
